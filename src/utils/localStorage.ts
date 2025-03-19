@@ -6,8 +6,10 @@ const isValidTask = (task: unknown): task is Task => {
   return (
     'id' in task &&
     'name' in task &&
+    'status' in task &&
     typeof task.id === 'string' &&
-    typeof task.name === 'string'
+    typeof task.name === 'string' &&
+    typeof task.status === 'string'
   );
 };
 
@@ -32,12 +34,12 @@ export const addTaskToLocalStorage = (username: string, task: Task): void => {
 
 export const updateTaskInLocalStorage = (
   username: string,
-  task: Task,
+  taskID: string,
 ): void => {
   const userTasks = getTasksFromLocalStorage(username);
 
   const updateUserTasks = userTasks.map(item =>
-    item.id === task.id ? { ...item, ...task } : item,
+    item.id === taskID ? { ...item, status: 'done' } : item,
   );
 
   localStorage.setItem(username, JSON.stringify(updateUserTasks));
@@ -45,12 +47,12 @@ export const updateTaskInLocalStorage = (
 
 export const removeTaskFromLocalStorage = (
   username: string,
-  task: Task,
+  taskID: string,
 ): void => {
   const userTasks = getTasksFromLocalStorage(username);
 
   localStorage.setItem(
     username,
-    JSON.stringify(userTasks.filter(item => item.id !== task.id)),
+    JSON.stringify(userTasks.filter(item => item.id !== taskID)),
   );
 };

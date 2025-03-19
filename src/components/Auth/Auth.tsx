@@ -8,21 +8,23 @@ import { useAuth } from '@/hooks/useAuth';
 
 export const Auth = () => {
   const [show, setShow] = useState<boolean>(true);
-  const { username, setUsername } = useAuth();
-  const [usernameError, setUsernameError] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [inputError, setInputError] = useState<boolean>(false);
+  const { setUsername } = useAuth();
 
   const handleUsername = (event: ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value);
+    setInputValue(event.target.value);
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (username.trim() !== '') {
-      setUsernameError(false);
+    if (inputValue.trim() !== '') {
+      setInputError(false);
       setShow(false);
+      setUsername(inputValue);
     } else {
-      setUsernameError(true);
+      setInputError(true);
       setUsername('');
     }
   };
@@ -40,11 +42,11 @@ export const Auth = () => {
             <Form.Control
               type="text"
               name="username"
-              value={username}
+              value={inputValue}
               onChange={handleUsername}
               placeholder="Enter username"
             />
-            {usernameError && (
+            {inputError && (
               <Form.Text className="position-absolute text-danger top-0 end-0">
                 Invalid username
               </Form.Text>

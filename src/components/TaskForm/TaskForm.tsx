@@ -9,14 +9,14 @@ interface TaskFormProps {
 }
 
 export const TaskForm = ({ onSave }: TaskFormProps) => {
-  const [taskName, setTaskName] = useState<string>('');
+  const [inputValue, setInputValue] = useState<string>('');
 
   const handleTask = (event: ChangeEvent<HTMLInputElement>) => {
-    setTaskName(event.target.value);
+    setInputValue(event.target.value);
   };
 
   const handleReset = () => {
-    setTaskName('');
+    setInputValue('');
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -24,11 +24,12 @@ export const TaskForm = ({ onSave }: TaskFormProps) => {
 
     const task: Task = {
       id: crypto.randomUUID(),
-      name: taskName,
+      name: inputValue,
+      status: 'process',
     };
 
     onSave(task);
-    setTaskName('');
+    setInputValue('');
   };
 
   return (
@@ -39,14 +40,14 @@ export const TaskForm = ({ onSave }: TaskFormProps) => {
       <Form.Control
         name="name"
         id="name"
-        value={taskName}
+        value={inputValue}
         onChange={handleTask}
         placeholder="Enter task"
       />
       <Button
         className="btn btn-primary"
         type="submit"
-        disabled={!taskName.trim()}
+        disabled={!inputValue.trim()}
       >
         Add
       </Button>
