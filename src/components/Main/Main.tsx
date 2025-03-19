@@ -13,6 +13,8 @@ import {
   updateTaskInLocalStorage,
 } from '@/utils/localStorage';
 
+import EmptyList from './img/empty.svg?react';
+
 export const Main = () => {
   const { username } = useAuth();
   const [tasks, setTask] = useState<Task[]>([]);
@@ -42,6 +44,8 @@ export const Main = () => {
     <Container className="app-container vh-100 w-100 d-flex align-items-center justify-content-center flex-column">
       <Title username={username} />
       <TaskForm onSave={addTask} />
+
+      {tasks.length === 0 && <EmptyList />}
 
       {tasks.length > 0 && (
         <TodoList
