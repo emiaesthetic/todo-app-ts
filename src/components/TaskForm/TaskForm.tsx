@@ -10,16 +10,17 @@ interface TaskFormProps {
   onSave: (task: Task) => void;
 }
 
+const priorityVariants = {
+  [Priority.Low]: 'success',
+  [Priority.Medium]: 'warning',
+  [Priority.High]: 'danger',
+};
+
 export const TaskForm = ({ onSave }: TaskFormProps) => {
   const [inputValue, setInputValue] = useState<string>('');
   const [priority, setPriority] = useState<Priority>(Priority.Low);
 
-  const dropdownVariant =
-    priority === Priority.Low
-      ? 'success'
-      : priority === Priority.Medium
-        ? 'warning'
-        : 'danger';
+  const dropdownVariant = priorityVariants[priority];
 
   const handleTask = (event: ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
@@ -29,16 +30,17 @@ export const TaskForm = ({ onSave }: TaskFormProps) => {
     setInputValue('');
   };
 
+  const createTask = (): Task => ({
+    id: crypto.randomUUID(),
+    name: inputValue,
+    status: 'process',
+    priority: priority,
+  });
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const task: Task = {
-      id: crypto.randomUUID(),
-      name: inputValue,
-      status: 'process',
-      priority: priority,
-    };
-
+    const task = createTask();
     onSave(task);
     setInputValue('');
     setPriority(Priority.Low);
@@ -62,13 +64,16 @@ export const TaskForm = ({ onSave }: TaskFormProps) => {
         id="dropdown-basic-button"
         title={priority}
       >
-        <Dropdown.Item onClick={() => setPriority(Priority.Low)}>
+        <Dropdown.Item key="low" onClick={() => setPriority(Priority.Low)}>
           {Priority.Low}
         </Dropdown.Item>
-        <Dropdown.Item onClick={() => setPriority(Priority.Medium)}>
+        <Dropdown.Item
+          key="medium"
+          onClick={() => setPriority(Priority.Medium)}
+        >
           {Priority.Medium}
         </Dropdown.Item>
-        <Dropdown.Item onClick={() => setPriority(Priority.High)}>
+        <Dropdown.Item key="high" onClick={() => setPriority(Priority.High)}>
           {Priority.High}
         </Dropdown.Item>
       </DropdownButton>
