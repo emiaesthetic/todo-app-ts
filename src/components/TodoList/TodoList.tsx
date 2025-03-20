@@ -1,5 +1,8 @@
+import { useState } from 'react';
 import Table from 'react-bootstrap/Table';
+import { createPortal } from 'react-dom';
 
+import Confirmation from '@/components/Confirmation';
 import TaskRow from '@/components/TableRow';
 import { Task } from '@/types/task';
 
@@ -10,6 +13,21 @@ interface TodoListProps {
 }
 
 export const TodoList = ({ tasks, onDelete, onToggle }: TodoListProps) => {
+  const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
+
+  if (taskToDelete) {
+    return createPortal(
+      <Confirmation
+        onExecute={() => {
+          onDelete(taskToDelete);
+          setTaskToDelete(null);
+        }}
+        onCancel={() => setTaskToDelete(null)}
+      />,
+      document.body,
+    );
+  }
+
   return (
     <div>
       <Table className="align-middle" bordered hover>
@@ -28,7 +46,7 @@ export const TodoList = ({ tasks, onDelete, onToggle }: TodoListProps) => {
               key={task.id}
               {...task}
               index={index + 1}
-              onDelete={onDelete}
+              onDelete={() => setTaskToDelete(task.id)}
               onToggle={onToggle}
             />
           ))}
