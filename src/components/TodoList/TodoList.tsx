@@ -6,10 +6,10 @@ import { Task } from '@/types/task';
 interface TodoListProps {
   tasks: Task[];
   onDelete: (id: string) => void;
-  onComplete: (id: string) => void;
+  onToggle: (id: string) => void;
 }
 
-export const TodoList = ({ tasks, onDelete, onComplete }: TodoListProps) => {
+export const TodoList = ({ tasks, onDelete, onToggle }: TodoListProps) => {
   return (
     <div>
       <Table className="align-middle" bordered hover>
@@ -29,7 +29,7 @@ export const TodoList = ({ tasks, onDelete, onComplete }: TodoListProps) => {
               {...task}
               index={index + 1}
               onDelete={onDelete}
-              onComplete={onComplete}
+              onToggle={onToggle}
             />
           ))}
         </tbody>

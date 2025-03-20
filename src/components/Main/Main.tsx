@@ -33,13 +33,23 @@ export const Main = () => {
     updateTasksInLocalStorage(username, updatedTasks);
   };
 
-  const completeTask = (id: string) => {
+  const getNextStatus = (currentStatus: Status): Status =>
+    currentStatus === 'done' ? 'process' : 'done';
+
+  const toggleStatus = (id: string) => {
     const updatedTasks = tasks.map(task =>
-      task.id === id ? { ...task, status: 'done' as Status } : task,
+      task.id === id
+        ? {
+            ...task,
+            status: getNextStatus(task.status),
+          }
+        : task,
     );
     setTask(updatedTasks);
     updateTasksInLocalStorage(username, updatedTasks);
   };
+
+  if (!username) return null;
 
   return (
     <Container className="app-container vh-100 w-100 d-flex align-items-center justify-content-center flex-column">
@@ -49,11 +59,7 @@ export const Main = () => {
       {tasks.length === 0 && <EmptyList />}
 
       {tasks.length > 0 && (
-        <TodoList
-          tasks={tasks}
-          onDelete={removeTask}
-          onComplete={completeTask}
-        />
+        <TodoList tasks={tasks} onDelete={removeTask} onToggle={toggleStatus} />
       )}
     </Container>
   );
