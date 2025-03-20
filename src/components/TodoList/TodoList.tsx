@@ -16,9 +16,9 @@ export const TodoList = ({ tasks, onDelete, onComplete }: TodoListProps) => {
         <thead>
           <tr>
             <th>№</th>
-            <th>Задача</th>
-            <th>Статус</th>
-            <th>Действия</th>
+            <th>Task</th>
+            <th>Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
 

@@ -16,7 +16,7 @@ export const TaskRow = ({
 }: TaskRow) => {
   const rowClass = status === 'done' ? 'table-success' : 'table-light';
   const nameClass = status === 'done' ? 'text-decoration-line-through' : '';
-  const statusText = status === 'done' ? 'Выполнена' : 'В процессе';
+  const statusText = status[0].toLocaleUpperCase() + status.slice(1);
 
   return (
     <tr className={`${rowClass} p-2`}>
@@ -25,14 +25,14 @@ export const TaskRow = ({
       <td>{statusText}</td>
       <td className="d-inline-flex gap-2 border-start-0">
         <button className="btn btn-danger" onClick={() => onDelete(id)}>
-          Удалить
+          Delete
         </button>
         <button
           className="btn btn-success"
           onClick={() => onComplete(id)}
           disabled={status === 'done'}
         >
-          Завершить
+          Complete
         </button>
       </td>
     </tr>
