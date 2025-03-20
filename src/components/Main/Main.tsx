@@ -5,12 +5,10 @@ import TaskForm from '@/components/TaskForm';
 import Title from '@/components/Title';
 import TodoList from '@/components/TodoList';
 import { useAuth } from '@/hooks/useAuth';
-import { Task } from '@/types/task';
+import { Status, Task } from '@/types/task';
 import {
-  addTaskToLocalStorage,
   getTasksFromLocalStorage,
-  removeTaskFromLocalStorage,
-  updateTaskInLocalStorage,
+  updateTasksInLocalStorage,
 } from '@/utils/localStorage';
 
 import EmptyList from './img/empty.svg?react';
@@ -24,20 +22,23 @@ export const Main = () => {
   }, [username]);
 
   const addTask = (task: Task) => {
-    setTask([...tasks, task]);
-    addTaskToLocalStorage(username, task);
+    const updatedTasks = [...tasks, task];
+    setTask(updatedTasks);
+    updateTasksInLocalStorage(username, updatedTasks);
   };
 
   const removeTask = (id: string) => {
-    setTask(tasks.filter(task => task.id !== id));
-    removeTaskFromLocalStorage(username, id);
+    const updatedTasks = tasks.filter(task => task.id !== id);
+    setTask(updatedTasks);
+    updateTasksInLocalStorage(username, updatedTasks);
   };
 
   const completeTask = (id: string) => {
-    setTask(
-      tasks.map(task => (task.id === id ? { ...task, status: 'done' } : task)),
+    const updatedTasks = tasks.map(task =>
+      task.id === id ? { ...task, status: 'done' as Status } : task,
     );
-    updateTaskInLocalStorage(username, id);
+    setTask(updatedTasks);
+    updateTasksInLocalStorage(username, updatedTasks);
   };
 
   return (

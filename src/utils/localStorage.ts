@@ -27,32 +27,6 @@ export const getTasksFromLocalStorage = (username: string): Task[] => {
   return [];
 };
 
-export const addTaskToLocalStorage = (username: string, task: Task): void => {
-  const userTasks = getTasksFromLocalStorage(username);
-  localStorage.setItem(username, JSON.stringify([...userTasks, task]));
-};
-
-export const updateTaskInLocalStorage = (
-  username: string,
-  taskID: string,
-): void => {
-  const userTasks = getTasksFromLocalStorage(username);
-
-  const updateUserTasks = userTasks.map(item =>
-    item.id === taskID ? { ...item, status: 'done' } : item,
-  );
-
-  localStorage.setItem(username, JSON.stringify(updateUserTasks));
-};
-
-export const removeTaskFromLocalStorage = (
-  username: string,
-  taskID: string,
-): void => {
-  const userTasks = getTasksFromLocalStorage(username);
-
-  localStorage.setItem(
-    username,
-    JSON.stringify(userTasks.filter(item => item.id !== taskID)),
-  );
+export const updateTasksInLocalStorage = (username: string, tasks: Task[]) => {
+  localStorage.setItem(username, JSON.stringify(tasks));
 };

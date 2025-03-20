@@ -1,4 +1,4 @@
-type Status = 'process' | 'done';
+export type Status = 'process' | 'done';
 
 export interface Task {
   id: string;
