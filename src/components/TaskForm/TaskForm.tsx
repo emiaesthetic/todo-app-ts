@@ -1,8 +1,10 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import Button from 'react-bootstrap/Button';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 import Form from 'react-bootstrap/Form';
 
-import { Task } from '@/types/task';
+import { Priority, Task } from '@/types/task';
 
 interface TaskFormProps {
   onSave: (task: Task) => void;
@@ -10,6 +12,14 @@ interface TaskFormProps {
 
 export const TaskForm = ({ onSave }: TaskFormProps) => {
   const [inputValue, setInputValue] = useState<string>('');
+  const [priority, setPriority] = useState<Priority>(Priority.Low);
+
+  const dropdownVariant =
+    priority === Priority.Low
+      ? 'success'
+      : priority === Priority.Medium
+        ? 'warning'
+        : 'danger';
 
   const handleTask = (event: ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
@@ -26,10 +36,12 @@ export const TaskForm = ({ onSave }: TaskFormProps) => {
       id: crypto.randomUUID(),
       name: inputValue,
       status: 'process',
+      priority: priority,
     };
 
     onSave(task);
     setInputValue('');
+    setPriority(Priority.Low);
   };
 
   return (
@@ -44,6 +56,23 @@ export const TaskForm = ({ onSave }: TaskFormProps) => {
         onChange={handleTask}
         placeholder="Enter task"
       />
+
+      <DropdownButton
+        variant={dropdownVariant}
+        id="dropdown-basic-button"
+        title={priority}
+      >
+        <Dropdown.Item onClick={() => setPriority(Priority.Low)}>
+          {Priority.Low}
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => setPriority(Priority.Medium)}>
+          {Priority.Medium}
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => setPriority(Priority.High)}>
+          {Priority.High}
+        </Dropdown.Item>
+      </DropdownButton>
+
       <Button
         className="btn btn-primary"
         type="submit"
@@ -51,6 +80,7 @@ export const TaskForm = ({ onSave }: TaskFormProps) => {
       >
         Add
       </Button>
+
       <Button className="btn btn-warning" type="reset" onClick={handleReset}>
         Reset
       </Button>

@@ -1,6 +1,6 @@
 import Button from 'react-bootstrap/Button';
 
-import { Task } from '@/types/task';
+import { Priority, Task } from '@/types/task';
 
 interface TaskRow extends Task {
   index: number;
@@ -12,17 +12,26 @@ export const TaskRow = ({
   id,
   name,
   status,
+  priority,
   index,
   onDelete,
   onToggle,
 }: TaskRow) => {
-  const rowClass = status === 'done' ? 'table-success' : 'table-light';
+  const rowClass =
+    status === 'done'
+      ? 'table-secondary'
+      : priority === Priority.Low
+        ? 'table-success'
+        : priority === Priority.Medium
+          ? 'table-warning'
+          : 'table-danger';
+
   const nameClass = status === 'done' ? 'text-decoration-line-through' : '';
   const statusText = status[0].toLocaleUpperCase() + status.slice(1);
   const toggleBtnVariant = status === 'done' ? 'warning' : 'success';
 
   return (
-    <tr className={`${rowClass} p-2`}>
+    <tr className={`${rowClass} p-2 bg-opacity-25`}>
       <td>{index}</td>
       <td className={nameClass}>{name}</td>
       <td>{statusText}</td>

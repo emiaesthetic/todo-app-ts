@@ -1,4 +1,4 @@
-import { Task } from '@/types/task';
+import { Priority, Task } from '@/types/task';
 
 const isValidTask = (task: unknown): task is Task => {
   if (typeof task !== 'object' || task === null) return false;
@@ -7,9 +7,11 @@ const isValidTask = (task: unknown): task is Task => {
     'id' in task &&
     'name' in task &&
     'status' in task &&
+    'priority' in task &&
     typeof task.id === 'string' &&
     typeof task.name === 'string' &&
-    typeof task.status === 'string'
+    (task.status === 'process' || task.status === 'done') &&
+    Object.values(Priority).includes(task.priority as Priority)
   );
 };
 
