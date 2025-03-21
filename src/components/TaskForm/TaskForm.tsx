@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
@@ -7,6 +7,7 @@ import Form from 'react-bootstrap/Form';
 import { Priority, Task } from '@/types/task';
 
 interface TaskFormProps {
+  task?: Task;
   onSave: (task: Task) => void;
 }
 
@@ -16,9 +17,16 @@ const priorityVariants = {
   [Priority.High]: 'danger',
 };
 
-export const TaskForm = ({ onSave }: TaskFormProps) => {
+export const TaskForm = ({ task, onSave }: TaskFormProps) => {
   const [inputValue, setInputValue] = useState<string>('');
   const [priority, setPriority] = useState<Priority>(Priority.Low);
+
+  useEffect(() => {
+    if (task) {
+      setInputValue(task.name);
+      setPriority(task.priority);
+    }
+  }, [task]);
 
   const dropdownVariant = priorityVariants[priority];
 
@@ -31,7 +39,7 @@ export const TaskForm = ({ onSave }: TaskFormProps) => {
   };
 
   const createTask = (): Task => ({
-    id: crypto.randomUUID(),
+    id: task?.id || crypto.randomUUID(),
     name: inputValue,
     status: 'process',
     priority: priority,
@@ -83,7 +91,7 @@ export const TaskForm = ({ onSave }: TaskFormProps) => {
         type="submit"
         disabled={!inputValue.trim()}
       >
-        Add
+        {task ? 'Update' : 'Add'}
       </Button>
 
       <Button className="btn btn-warning" type="reset" onClick={handleReset}>

@@ -4,6 +4,7 @@ import { Priority, Task } from '@/types/task';
 
 interface TaskRow extends Task {
   index: number;
+  onEdit: () => void;
   onDelete: () => void;
   onToggle: (id: string) => void;
 }
@@ -20,6 +21,7 @@ export const TaskRow = ({
   status,
   priority,
   index,
+  onEdit,
   onDelete,
   onToggle,
 }: TaskRow) => {
@@ -35,6 +37,10 @@ export const TaskRow = ({
       <td className={nameClass}>{name}</td>
       <td>{statusText}</td>
       <td className="d-inline-flex gap-2 border-start-0">
+        <Button key="edit" variant="primary" onClick={onEdit}>
+          Edit
+        </Button>
+
         <Button key="delete" variant="danger" onClick={onDelete}>
           Delete
         </Button>
